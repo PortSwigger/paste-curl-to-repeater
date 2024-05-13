@@ -1,0 +1,13 @@
+Uuid: d5648b2788324b40a586a96ba8fca2bf
+ExtensionType: 1
+Name: Paste cURL to Repeater
+RepoName: paste-curl-to-repeater
+ScreenVersion: 1.0
+SerialVersion: 1
+MinPlatformVersion: 15
+ProOnly: False
+Author: August Detlefsen
+ShortDescription: Allow pasting cURL commands as raw HTTP requests in a new tab in Repeater.
+EntryPoint: target/burp-suite-paste-curl-1.0-SNAPSHOT.jar
+BuildCommand: mvn package -DskipTests=true -Dmaven.javadoc.skip=true -B
+SupportedProducts: Pro, Community
