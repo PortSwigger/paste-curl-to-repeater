@@ -39,6 +39,7 @@ public class MenuItemsProvider implements ContextMenuItemsProvider {
         pasteItem.addActionListener((ActionEvent e) -> {
             //get cURL request from clipboard
             String curlRequest = getClipboardContent();
+            api.logging().logToOutput("Parsing: " + curlRequest);
 
             //parse cURL into raw HTTP request
             HttpRequest rawRequest = parseCurlRequest(curlRequest);
@@ -52,13 +53,11 @@ public class MenuItemsProvider implements ContextMenuItemsProvider {
     }
 
     private HttpRequest parseCurlRequest(String curlCommand) {
-        CurlParser.CurlRequest curlRequest = CurlParser.parseCurlCommand(curlCommand);
+        CurlParser.CurlRequest curlRequest = CurlParser.parseCurlCommand(curlCommand, api);
 
-        HttpService service = HttpService.httpService(curlRequest.getProtocol() + "://" + curlRequest.getHost() + curlRequest.getPath());
+        HttpService service = HttpService.httpService(curlRequest.getBaseUrl());
 
-        HttpRequest output = HttpRequest.httpRequest()
-                .withHeader("Host", curlRequest.getHost())
-                .withPath(curlRequest.getPath())
+        HttpRequest output = HttpRequest.httpRequestFromUrl(curlRequest.getBaseUrl())
                 .withMethod(curlRequest.getMethod())
                 .withBody(curlRequest.getBody());
 
