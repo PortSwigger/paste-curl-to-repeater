@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 /**
  * Parses cURL request into strings.
- * 
+ *
  * @author August Detlefsen
  */
 public class CurlParser {
@@ -101,8 +101,9 @@ public class CurlParser {
             }
         }
 
-        // Extract request body
-        Pattern bodyPattern = Pattern.compile("(?:--data-raw|-d)\\s+(['\"])(.*?)(\\1)", Pattern.DOTALL);
+        // Extract request body. Match any common data flag (-d, --data, --data-raw, --data-ascii,
+        // --data-binary, --data-urlencode, --json) so implicit POST detection works for all of them
+        Pattern bodyPattern = Pattern.compile("(?:--data-raw|--data-ascii|--data-binary|--data-urlencode|--data|--json|-d)\\s+(['\"])(.*?)(\\1)", Pattern.DOTALL);
         Matcher bodyMatcher = bodyPattern.matcher(curlCommand);
 
         if (bodyMatcher.find()) {
