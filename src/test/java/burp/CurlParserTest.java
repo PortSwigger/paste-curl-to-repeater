@@ -130,6 +130,30 @@ class CurlParserTest {
     }
 
     @Test
+    public void parseImplicitPostWithDataFlag() {
+        CurlParser.CurlRequest request = CurlParser.parseCurlCommand("curl 'https://example.com/api/items' -H 'Content-Type: application/json' --data '{\"name\":\"test\",\"price\":100}'");
+
+        assertNotNull(request);
+        assertEquals("POST", request.getMethod());
+        assertEquals("https", request.getProtocol());
+        assertEquals("example.com", request.getHost());
+        assertEquals("/api/items", request.getPath());
+
+        assertEquals("https://example.com/api/items", request.getBaseUrl());
+
+        // Test headers
+        List<HttpHeader> headers = request.getHeaders();
+        assertEquals(1, headers.size());
+
+        HttpHeader header = headers.get(0);
+        assertEquals("Content-Type", header.name());
+        assertEquals("application/json", header.value());
+
+        //test body
+        assertEquals("{\"name\":\"test\",\"price\":100}", request.getBody());
+    }
+
+    @Test
     public void parseDoubleQuotedJson() {
         CurlParser.CurlRequest request = CurlParser.parseCurlCommand("curl 'https://example.com/api/endpoint' -H 'Content-Type: application/json' -d \"{'key': 'value'}\"");
 
